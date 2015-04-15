@@ -57,10 +57,10 @@ sessionInfo()                           # to document platform
 ## loaded via a namespace (and not attached):
 ##  [1] assertthat_0.1   colorspace_1.2-6 DBI_0.3.1        digest_0.6.8    
 ##  [5] evaluate_0.5.5   formatR_1.1      grid_3.1.3       gtable_0.1.2    
-##  [9] htmltools_0.2.6  labeling_0.3     lazyeval_0.1.10  MASS_7.3-40     
-## [13] munsell_0.4.2    parallel_3.1.3   plyr_1.8.1       proto_0.3-10    
-## [17] Rcpp_0.11.5      reshape2_1.4.1   rmarkdown_0.5.1  stringr_0.6.2   
-## [21] tools_3.1.3      yaml_2.1.13
+##  [9] htmltools_0.2.6  labeling_0.3     lazyeval_0.1.10  markdown_0.7.4  
+## [13] MASS_7.3-40      mime_0.3         munsell_0.4.2    parallel_3.1.3  
+## [17] plyr_1.8.1       proto_0.3-10     Rcpp_0.11.5      reshape2_1.4.1  
+## [21] rmarkdown_0.5.1  stringr_0.6.2    tools_3.1.3      yaml_2.1.13
 ```
 Notice this markdown was developed on a Windows 64-bit platform with the english US locale. The project resides in the PA1 subdirectory and data will reside in PA/data subdir. We document the libraries used and the session info provides reproducibility on the documented R Studio Platform and the Windows 7 x64 version.
 
@@ -146,7 +146,7 @@ daily <- df %>%
 ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
 ##    41.00  8841.00 10765.00 10766.19 13294.00 21194.00
 ```
-The daily summary data frame reveals steps taken vary between 41 and 21194, with a Mean value of 10766. The distribution is represented in the following histogram generated with ggplot and the geom_histogram() syntax. Note we compute the binwidth to generate 30 bins or bars, indeed supressing the warning we would generate if we omitted the binwidth parameter.
+The daily summary data frame reveals steps taken vary between 41 and 21194, with a Mean value of 10766 and a Median value of 10765. The distribution is represented in the following histogram generated with ggplot and the geom_histogram() syntax. Note we compute the binwidth to generate 30 bins or bars, indeed supressing the warning we would generate if we omitted the binwidth parameter.
 
 ```r
 g<-ggplot(daily,aes(x=total/1e3))+geom_histogram(binwidth=round(max(daily$total/1e3)/30))+
@@ -236,7 +236,7 @@ print(msg)
 
 #### 3.2. Replace NAs with 5-min interval mean in activity
 
-We choose to implement a strategy to replace missing data with the average values computed in the same time slice, and use merging to append mean values automatically to the df.m subset. Since both dataframes have same interval series, it is the only key necessary to merge. Since we definitely want to retain all data ,we use the option all=T.
+We choose to implement a strategy to replace missing data with the average values computed in the same time slice, and use merging to append mean values automatically to the df.m subset. Since both data frames have same interval series, it is the only key necessary to perform the merge. Since we definitely want to retain all data ,we use the option all=T.
 
 ```r
 df.m<-merge(df.m,hourly[,c(1,3)],all=T)     # merge with hourly
@@ -279,13 +279,14 @@ We capture the daily modified statistics daily.m in the vector ds.m and plot the
 
 ```r
 g<-ggplot(daily.m,aes(x=total/1e3))+geom_histogram(binwidth=round(max(daily.m$total/1e3)/30))+
-        labs(title="Histogram of Total Daily Steps\n(in Thousands)")+
+        labs(title="Histogram of Total Daily Steps (in Thousands)\nderived from the modified dataset")+
         xlab("Total Daily Steps (in Thousands)")+
         ylab("Count (in Days)")
 print(g)
 ```
 
 ![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14-1.png) 
+
 We can now easily compare daily summaries for the original and modified sets. We bind the two similar vectors together and check for identical daily maximum averages:
 
 ```r
