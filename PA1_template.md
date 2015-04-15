@@ -1,4 +1,9 @@
-# Reproducible Research: PA1_template
+---
+title: "Reproducible Research: PA1_template"
+output: 
+  html_document:
+    keep_md: true
+---
 ### System and platform documentation
 
 Before any analysis is performed, let's start with system and platform documentation in a fresh directory to insure reproducibility.
@@ -25,22 +30,6 @@ projectdir<-paste(userdir,project,sep="/")
 setwd(projectdir)                       # work from the project directory
 datadir<-"./data" ; if (!file.exists("data")) { dir.create("data") } # data will reside in subdir 
 library(dplyr)                          # provides data manipulating functions
-```
-
-```
-## 
-## Attaching package: 'dplyr'
-## 
-## The following object is masked from 'package:stats':
-## 
-##     filter
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
-
-```r
 library(ggplot2)                        # for graphics
 library(magrittr)                       # ceci n'est pas une pipe
 library(scales)                         # for scaling time series in ggplot
@@ -63,15 +52,15 @@ sessionInfo()                           # to document platform
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] scales_0.2.4  magrittr_1.5  ggplot2_1.0.1 dplyr_0.4.1  
+## [1] knitr_1.9     scales_0.2.4  magrittr_1.5  ggplot2_1.0.1 dplyr_0.4.1  
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] assertthat_0.1   colorspace_1.2-6 DBI_0.3.1        digest_0.6.8    
 ##  [5] evaluate_0.5.5   formatR_1.1      grid_3.1.3       gtable_0.1.2    
-##  [9] htmltools_0.2.6  knitr_1.9        MASS_7.3-40      munsell_0.4.2   
-## [13] parallel_3.1.3   plyr_1.8.1       proto_0.3-10     Rcpp_0.11.5     
-## [17] reshape2_1.4.1   rmarkdown_0.5.1  stringr_0.6.2    tools_3.1.3     
-## [21] yaml_2.1.13
+##  [9] htmltools_0.2.6  labeling_0.3     lazyeval_0.1.10  MASS_7.3-40     
+## [13] munsell_0.4.2    parallel_3.1.3   plyr_1.8.1       proto_0.3-10    
+## [17] Rcpp_0.11.5      reshape2_1.4.1   rmarkdown_0.5.1  stringr_0.6.2   
+## [21] tools_3.1.3      yaml_2.1.13
 ```
 Notice this markdown was developed on a Windows 64-bit platform with the english US locale. The project resides in the PA1 subdirectory and data will reside in PA/data subdir. We document the libraries used and the session info provides reproducibility on the documented R Studio Platform and the Windows 7 x64 version.
 
@@ -167,7 +156,7 @@ g<-ggplot(daily,aes(x=total/1e3))+geom_histogram(binwidth=round(max(daily$total/
 print(g)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
 
 ### Q2. What is the average daily activity pattern ?
 
@@ -225,7 +214,7 @@ g<-ggplot(hourly,aes(x=time,y=average))+
 print(g)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-9-1.png) 
+![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png) 
 
 ### Q3: Inputing missing values
 
@@ -296,7 +285,7 @@ g<-ggplot(daily.m,aes(x=total/1e3))+geom_histogram(binwidth=round(max(daily.m$to
 print(g)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-14-1.png) 
+![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14-1.png) 
 We can now easily compare daily summaries for the original and modified sets. We bind the two similar vectors together and check for identical daily maximum averages:
 
 ```r
@@ -426,7 +415,7 @@ g<-ggplot(hourly.m,aes(x=time,y=average))+
 print(g)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-23-1.png) 
+![plot of chunk unnamed-chunk-23](figure/unnamed-chunk-23-1.png) 
 
 We observe on this last facet plot different steps patterns occuring on weekdays vs. weekend!
 This concludes the PA1_template.Rmd assignment.
