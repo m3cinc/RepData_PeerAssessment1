@@ -55,7 +55,13 @@ head(activity,5)
 
 ### Q1: What is mean total number of steps taken per day ?
 
-To simplify coding and variables use, we'll implement using the magrittr piping scheme, starting with the df data frame and performing the operators group_by, summarize, and collecting the result in the daily dataframe. We'll retain the summary in the ds vector.
+To simplify coding and variables use, we'll implement using the magrittr piping scheme, recognizable by its main operator (piping) %>%. The recent addition of this package is said to revolutionize R syntax and has been already reviewed. See the recent vignette and review also at:
+
+[link](http://cran.r-project.org/web/packages/magrittr/magrittr.pdf) and 
+[link](http://blog.revolutionanalytics.com/2014/07/magrittr-simplifying-r-code-with-pipes.html),
+[link](http://zevross.com/blog/2015/01/13/a-new-data-processing-workflow-for-r-dplyr-magrittr-tidyr-ggplot2/).
+
+Starting with the df data frame and performing sequentially (like thru a %>% pipe, the operators group_by, summarize, and collecting the result in the daily dataframe. We'll retain the result of these operations, i.e. the data frame summary in the ds vector.
 
 ```{r}
 daily <- df %>%                                                                              
@@ -85,8 +91,8 @@ hourly <- df %>%
 ```
 Next, we'll convert the format of the interval series so it can be used for time series ggplot, which requires a POSIX format. The strategy consists in taking as reference date the 1st date we observed in the data set, df$date[1], and then cast the interval number into a 4 digit character, padded with leading zeros, using the sprintf() function. This allows for unambiguous conversion of a full date in strptime(), once the hour and minues are properly recognized, that is in %H%M format. The last step is to convert the time in POSIXlt format and only display time of day as %H:%M. This is accomplished in as series of magrittr pipes. We'll summarize the hourly dataframe statistics in the dh vector. Note that this chunk contains 2 specific magrittr syntax: 
 
-- Both sprintf() and paste() functions require a parameter passed at a possition which is not the 1st parameter, and thus use the dot(.) placeholder. (see p9 of the magrittr vignette for further details). 
-- The use_series is also a series aliases provided by magrittr and is equivalent to the '$' function, which is easier to read when composing chains using the %>% operator. (see p3 of the magrittr vignette for the current list of implemented aliases).
+- Both sprintf() and paste() functions require a parameter passed at a position which is not the 1st parameter, and thus use the dot(.) placeholder. Please refer to p9 of the magrittr vignette for further details at [link](http://cran.r-project.org/web/packages/magrittr/magrittr.pdf). 
+- The use_series is also a series aliases provided by magrittr and is equivalent to the '$' function, which is easier to read when composing chains using the %>% operator. A number of these aliases are currently defined in p3 of the magrittr vignette at [link](http://cran.r-project.org/web/packages/magrittr/magrittr.pdf).
 ```{r}
 hourly$time <- hourly %>%
         use_series(interval) %>%                # convert interval to POSIXlt for time series plot
