@@ -30,6 +30,22 @@ projectdir<-paste(userdir,project,sep="/")
 setwd(projectdir)                       # work from the project directory
 datadir<-"./data" ; if (!file.exists("data")) { dir.create("data") } # data will reside in subdir 
 library(dplyr)                          # provides data manipulating functions
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+## 
+## The following object is masked from 'package:stats':
+## 
+##     filter
+## 
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
 library(ggplot2)                        # for graphics
 library(magrittr)                       # ceci n'est pas une pipe
 library(scales)                         # for scaling time series in ggplot
@@ -52,15 +68,14 @@ sessionInfo()                           # to document platform
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] knitr_1.9     scales_0.2.4  magrittr_1.5  ggplot2_1.0.1 dplyr_0.4.1  
+## [1] scales_0.2.4  magrittr_1.5  ggplot2_1.0.1 dplyr_0.4.1   knitr_1.9    
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] assertthat_0.1   colorspace_1.2-6 DBI_0.3.1        digest_0.6.8    
-##  [5] evaluate_0.5.5   formatR_1.1      grid_3.1.3       gtable_0.1.2    
-##  [9] htmltools_0.2.6  labeling_0.3     lazyeval_0.1.10  markdown_0.7.4  
-## [13] MASS_7.3-40      mime_0.3         munsell_0.4.2    parallel_3.1.3  
-## [17] plyr_1.8.1       proto_0.3-10     Rcpp_0.11.5      reshape2_1.4.1  
-## [21] rmarkdown_0.5.1  stringr_0.6.2    tools_3.1.3      yaml_2.1.13
+##  [5] evaluate_0.6     formatR_1.1      grid_3.1.3       gtable_0.1.2    
+##  [9] htmltools_0.2.6  MASS_7.3-40      munsell_0.4.2    parallel_3.1.3  
+## [13] plyr_1.8.1       proto_0.3-10     Rcpp_0.11.5      reshape2_1.4.1  
+## [17] rmarkdown_0.5.1  stringr_0.6.2    tools_3.1.3      yaml_2.1.13
 ```
 Notice this markdown was developed on a Windows 64-bit platform with the english US locale. The project resides in the PA1 subdirectory and data will reside in PA/data subdir. We document the libraries used and the session info provides reproducibility on the documented R Studio Platform and the Windows 7 x64 version.
 
@@ -130,11 +145,7 @@ head(activity,5)
 
 ### Q1: What is mean total number of steps taken per day ?
 
-To simplify coding and variables use, we'll implement using the magrittr piping scheme, recognizable by its main operator (piping) %>%. The recent addition of this package is said to revolutionize R syntax and has been already reviewed. See the recent vignette and review also at:
-
-[link]http://cran.r-project.org/web/packages/magrittr/magrittr.pdf, 
-[link]http://blog.revolutionanalytics.com/2014/07/magrittr-simplifying-r-code-with-pipes.html and
-[link]http://zevross.com/blog/2015/01/13/a-new-data-processing-workflow-for-r-dplyr-magrittr-tidyr-ggplot2/ .
+To simplify coding and variables use, we'll implement using the magrittr piping scheme, recognizable by its main operator (piping) %>%. The recent addition of this package is said to revolutionize R syntax and has been already reviewed. See the recent [magrittr Vignette](http://cran.r-project.org/web/packages/magrittr/magrittr.pdf) and reviews recently posted [Simplifying R code with pipes](http://blog.revolutionanalytics.com/2014/07/magrittr-simplifying-r-code-with-pipes.html) and [A new data processing workflow for R dplyr magrittr tidyr ggplot2](http://zevross.com/blog/2015/01/13/a-new-data-processing-workflow-for-r-dplyr-magrittr-tidyr-ggplot2/).
 
 Starting with the df data frame and performing sequentially (like thru a %>% pipe, the operators group_by, summarize, and collecting the result in the daily dataframe. We'll retain the result of these operations, i.e. the data frame summary in the ds vector.
 
@@ -176,8 +187,8 @@ hourly <- df %>%
 ```
 Next, we'll convert the format of the interval series so it can be used for time series ggplot, which requires a POSIX format. The strategy consists in taking as reference date the 1st date we observed in the data set, df$date[1], and then cast the interval number into a 4 digit character, padded with leading zeros, using the sprintf() function. This allows for unambiguous conversion of a full date in strptime(), once the hour and minues are properly recognized, that is in %H%M format. The last step is to convert the time in POSIXlt format and only display time of day as %H:%M. This is accomplished in as series of magrittr pipes. We'll summarize the hourly dataframe statistics in the dh vector. Note that this chunk contains 2 specific magrittr syntax: 
 
-- Both sprintf() and paste() functions require a parameter passed at a position which is not the 1st parameter, and thus use the dot(.) placeholder. Please refer to p9 of the magrittr vignette for further details at [link]http://cran.r-project.org/web/packages/magrittr/magrittr.pdf. 
-- The use_series is also a series aliases provided by magrittr and is equivalent to the '$' function, which is easier to read when composing chains using the %>% operator. A number of these aliases are currently defined in p3 of the magrittr vignette at [link]http://cran.r-project.org/web/packages/magrittr/magrittr.pdf.
+- Both sprintf() and paste() functions require a parameter passed at a position which is not the 1st parameter, and thus use the dot(.) placeholder. Please refer to p9 of the [magrittr Vignette](http://cran.r-project.org/web/packages/magrittr/magrittr.pdf) for further details. 
+- The use_series is also a series aliases provided by magrittr and is equivalent to the '$' function, which is easier to read when composing chains using the %>% operator. A number of these aliases are currently defined in p3 of the [magrittr Vignette](http://cran.r-project.org/web/packages/magrittr/magrittr.pdf).
 
 ```r
 hourly$time <- hourly %>%
